@@ -6,7 +6,7 @@ def viewmodel(request):
     books = Book.objects.all()
     books_list= "\n".join([f"{book.title} by {book.author.name}"for book in books])  
     context = {"books_list" : books_list }
-    return render(request, "list_books.html", context )
+    return render(request, "relationship_app/list_books.html", context )
 
 # Create your viewhere.
 

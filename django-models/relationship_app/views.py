@@ -1,8 +1,9 @@
 from django.shortcuts import render
+from django.views.generic import DetailView
 from django.http import HttpRequest
 from .models import Book
 from .models import Library
-from django.views.generic import DetailView
+
 def viewmodel(request):
     books = Book.objects.all()
     books_list= "\n".join([f"{book.title} by {book.author.name}"for book in books])  

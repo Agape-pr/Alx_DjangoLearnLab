@@ -50,7 +50,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 # Admin view that only users with the 'Admin' role can access
 @user_passes_test(lambda u: u.userprofile.role == 'Admin')
-def admin_view(request):
+def admin(request):
     return render(request, 'admin_view.html')
 
 # Librarian view that only users with the 'Librarian' role can access

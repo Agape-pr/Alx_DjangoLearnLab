@@ -10,9 +10,6 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import user_passes_test
 
 
-
-
-
 def viewmodel(request):
     books = Book.objects.all()
     books_list= "\n".join([f"{book.title} by {book.author.name}"for book in books])  
@@ -46,6 +43,7 @@ class SignUpView(CreateView):
 # Admin view that only users with the 'Admin' role can access
 #@user_passes_test(lambda u: u.userprofile.role == 'Admin')
 #def admin_view(request):
+
 def is_admin(user):
     return getattr(user, 'userprofile', None) and user.userprofile.role == 'Admin'
 

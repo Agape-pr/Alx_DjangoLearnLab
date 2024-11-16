@@ -50,7 +50,7 @@ class SignUpView(CreateView):
 
 # Admin view that only users with the 'Admin' role can access
 @user_passes_test(lambda u: u.userprofile.role == 'Admin')
-def admin(request):
+def admin_view(request):
     return render(request, 'admin_view.html')
 
 # Librarian view that only users with the 'Librarian' role can access

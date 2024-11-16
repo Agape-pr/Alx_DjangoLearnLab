@@ -12,6 +12,7 @@ from django.contrib.auth import login
 
 from django.contrib.auth.decorators import user_passes_test
 from .models import UserProfile
+from django.contrib.auth.decorators import user_passes_test
 
 
 
@@ -45,8 +46,7 @@ class SignUpView(CreateView):
 
 
 
-from django.shortcuts import render
-from django.contrib.auth.decorators import user_passes_test
+
 
 # Admin view that only users with the 'Admin' role can access
 @user_passes_test(lambda u: u.userprofile.role == 'Admin')
@@ -57,7 +57,6 @@ def admin(request):
 @user_passes_test(lambda u: u.userprofile.role == 'Librarian')
 def librarian_view(request):
     return render(request, 'librarian_view.html')
-
 # Member view that only users with the 'Member' role can access
 @user_passes_test(lambda u: u.userprofile.role == 'Member')
 def member_view(request):

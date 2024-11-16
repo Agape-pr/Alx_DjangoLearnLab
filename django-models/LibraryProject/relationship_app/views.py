@@ -46,7 +46,6 @@ class SignUpView(CreateView):
 # Admin view that only users with the 'Admin' role can access
 #@user_passes_test(lambda u: u.userprofile.role == 'Admin')
 #def admin_view(request):
-#   return render(request, 'admin_view.html')
 def is_admin(user):
     return getattr(user, 'userprofile', None) and user.userprofile.role == 'Admin'
 

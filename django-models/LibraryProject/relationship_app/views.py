@@ -44,22 +44,33 @@ class SignUpView(CreateView):
 #@user_passes_test(lambda u: u.userprofile.role == 'Admin')
 #def admin_view(request):
 
+
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+from .models import UserProfile
+
+def has_role(user, role):
+    return UserProfile.objects.filter(user=user.id, role=role).exists()
 def is_admin(user):
-    return getattr(user, 'userprofile', None) and user.userprofile.role == 'Admin'
+    return has_role(user, "Admin")
+def is_librarian(user):
+    return has_role(user, "Librarian")
+def is_member(user):
+    return has_role(user, "Member")
 
+# Views for Admin users
 @user_passes_test(is_admin)
-def Admin_view(request):
-    # Your view logic here
-    return render(request, 'admin_dashboard.html')
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
 
-# Librarian view that only users with the 'Librarian' role can access
-@user_passes_test(lambda u: u.userprofile.role == 'Librarian')
+# View for Librarian users
+@user_passes_test(is_librarian)
 def librarian_view(request):
-    return render(request, 'librarian_view.html')
-# Member view that only users with the 'Member' role can access
-@user_passes_test(lambda u: u.userprofile.role == 'Member')
+    return render(request, 'relationship_app/librarian_view.html')
+
+# View for Member users
+@user_passes_test(is_member)
 def member_view(request):
-    return render(request, 'member_view.html')
+    return render(request, 'relationship_app/member_view.html')
 
 
 

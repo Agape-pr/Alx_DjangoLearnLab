@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth import login
 from django.contrib.auth.decorators import user_passes_test
-
+from django.contrib.auth.decorators import permission_required
 
 def viewmodel(request):
     books = Book.objects.all()
@@ -73,6 +73,15 @@ def member_view(request):
     return render(request, 'relationship_app/member_view.html')
 
 
+from django.shortcuts import get_object_or_404, redirect
+
+@permission_required('relationship_app.can_delete_book')
+def delete_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == "POST":
+        book.delete()
+        return redirect('book_list')
+    return render(request, 'relationship_app/delete_book.html', {'book': book})
 
 
 

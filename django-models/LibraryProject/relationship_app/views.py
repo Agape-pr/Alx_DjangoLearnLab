@@ -2,21 +2,14 @@ from django.shortcuts import render
 
 from django.views.generic.detail import DetailView
 from django.http import HttpRequest
-from .models import Book
-from .models import Library
-from django.contrib.auth.forms import UserCreationForm
+from .models import Book, Library, UserProfile
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth import login
-
 from django.contrib.auth.decorators import user_passes_test
-from .models import UserProfile
 
 
-
-from django.shortcuts import render
-from django.http import HttpResponseForbidden
 def viewmodel(request):
     books = Book.objects.all()
     books_list= "\n".join([f"{book.title} by {book.author.name}"for book in books])  
@@ -45,33 +38,45 @@ class SignUpView(CreateView):
 
 
 
-from django.shortcuts import render
-from django.contrib.auth.decorators import user_passes_test
+
 
 # Admin view that only users with the 'Admin' role can access
-@user_passes_test(lambda u: u.userprofile.role == 'Admin')
-def admin(request):
-    return render(request, 'admin_view.html')
-
-# Librarian view that only users with the 'Librarian' role can access
-@user_passes_test(lambda u: u.userprofile.role == 'Librarian')
-def librarian_view(request):
-    return render(request, 'librarian_view.html')
-
-# Member view that only users with the 'Member' role can access
-@user_passes_test(lambda u: u.userprofile.role == 'Member')
-def member_view(request):
-    return render(request, 'member_view.html')
+#@user_passes_test(lambda u: u.userprofile.role == 'Admin')
+#def admin_view(request):
 
 
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+from .models import UserProfile
 
-
-
-# Assuming you have a UserProfile model with a 'role' field
+def has_role(user, role):
+    return UserProfile.objects.filter(user=user, role=role).exists()
 def is_admin(user):
-    return user.userprofile.role == 'Admin'
+    return has_role(user, "Admin")
+def is_librarian(user):
+    return has_role(user, "Librarian")
+def is_member(user):
+    return has_role(user, "Member")
 
+# Views for Admin users
 @user_passes_test(is_admin)
 def admin_view(request):
-    # Your view logic here
-    return render(request, 'admin_dashboard.html')
+    return render(request, 'relationship_app/admin_view.html')
+
+# View for Librarian users
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+
+# View for Member users
+@user_passes_test(is_member)
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
+
+
+
+
+
+
+
+
+

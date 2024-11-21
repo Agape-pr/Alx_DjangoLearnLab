@@ -98,13 +98,14 @@ from .models import Book
 @permission_required('relationship_app.can_add_book', raise_exception=True)
 def add_book(request):
     if request.method == "POST":
-        form = BookForm(request.POST)
+        form = BookForm(request.post)
         if form.is_valid():
             form.save()
-            return redirect('book_list')  # Adjust to your URL name
+            return('book_list')
     else:
         form = BookForm()
-    return render(request, 'relationship_app/add_book.html', {'form': form})
+    return render(request, 'relationship_app/add_book.html', {'form' : form})
+
 
 # View for changing a book
 @permission_required('relationship_app.can_change_book', raise_exception=True)

@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import UserProfile, CustomerUser
+from .models import UserProfile, CustomUser
 from django.contrib.auth.admin import UserAdmin
 
 from django.contrib import admin
-from .models import Author, Book, Librarian, Library, UserProfil, CustomUser
+from .models import Author, Book, Librarian, Library, UserProfile, CustomUser
 
 # Define a custom admin class to control how models appear in the admin interface
 class RelationAdmin(admin.ModelAdmin):
@@ -45,4 +45,4 @@ class UserProfileAdmin(RelationAdmin):
 
 
     
-admin.site.register(UserProfile, CustomUser)
+admin.site.register(CustomUser)

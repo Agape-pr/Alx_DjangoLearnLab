@@ -2,6 +2,8 @@ from typing import Any
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.conf import settings
+
 
 # Create your models here.
 class Author(models.Model):
@@ -21,11 +23,12 @@ class Book(models.Model):
             ("can_change_book", "Can change book"),
             ("can_delete_book", "Can delete book"),
         ]
+        
     def __str__(self):
         return self.title
 class Library(models.Model):
     name = models.CharField(max_length=40)
-    books = models.ManyToManyField(Book, related_name= 'books')
+    books = models.ManyToManyField(Book, related_name= 'libraries')
     def __str__(self):
         return self.name
 
@@ -36,24 +39,13 @@ class Librarian(models.Model):
         return self.name
     
     
-class UserProfile(models.Model):
-    ROLE_CHOICES = (
-        ('Admin', 'Admin'),
-        ('Librarian', 'Librarian'),
-        ('Member', 'Member'),
-    )
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='userprofile')
-    role = models.CharField(max_length=10, choices=[('Admin', 'Admin'), ('Librarian', 'Librarian'), ('Member', 'Member')])
-  
-    def __str__(self):
-        return f"{self.user.username} - {self.role}"
 
 class UserProfile(models.Model):
     class Role(models.TextChoices):
         admin = "Admin"
         librarian = "Librarian"
         member = "Member"
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name= 'userprofile')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name= 'userprofile')
     role = models.CharField(choices=Role, max_length=10, default=Role.member)
     
     def __str__(self) -> str:
@@ -62,21 +54,7 @@ class UserProfile(models.Model):
     
    
 
-# relationship_app/models.py
-from django.db import models
 
-class Book(models.Model):
-    title = models.CharField(max_length=100)
-    author = models.CharField(max_length=100)
-    publication_year = models.IntegerField()
-
-    class Meta:
-        permissions = [
-            ("can_add_book", "Can add book"),
-            ("can_change_book", "Can change book"),
-            ("can_delete_book", "Can delete book"),
-        ]
-    
     
 
 
@@ -97,7 +75,7 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save()
         return user
-    def create(self, username, password):
+    def create_superusers(self, username, password):
         user = self.create_user(username, password)
         user.is_stuff = True
         user.is_superuser = True

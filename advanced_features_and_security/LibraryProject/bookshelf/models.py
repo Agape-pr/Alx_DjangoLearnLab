@@ -14,7 +14,7 @@ class CustomUser(AbstractUser):
     profile_photo = models.ImageField(upload_to='profile_photos/')
 
 
-class UserManager(BaseUserManager):
+class CustomUserManager(BaseUserManager):
     def create_user(self, username, password):
         if not username :
             raise ValueError("Username is required")

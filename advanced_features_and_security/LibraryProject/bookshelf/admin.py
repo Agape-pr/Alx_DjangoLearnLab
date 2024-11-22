@@ -15,5 +15,5 @@ class CustomUserAdmin(admin.ModelAdmin):
     
     
 admin.site.register(Book, BookAdmin)
-admin.site.regiater(CustomUser, CustomUserAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)
 # Register your models here.

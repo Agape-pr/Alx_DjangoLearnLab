@@ -20,26 +20,36 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-32+=oh11&x=y)4&%0t=$_z3=$o$%+8r8*cfz4l3ye5^x(_dr8b'
+# SECRET_KEY = 'django-insecure-$#g6i$8glq2_om_b-3hqyeceh^0#eef-nv81#g4a8$6%czpe_v'
+from decouple import config
+SECRET_KEY = config('DJANGO_SECRET_KEY', default='fallback-default-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost'
+]
 
+#decoupled Users to new custom user
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 # Application definition
 
 INSTALLED_APPS = [
+    'bookshelf.apps.BookshelfConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bookshelf',
-    'relationship_app',
-
+    'relationship_app.apps.RelationshipAppConfig',
+    'csp',
+    'sslserver'
+    
 ]
 
 MIDDLEWARE = [
@@ -50,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
@@ -125,5 +136,26 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'relationship_app.CustomUser'
-AUTH_USER_MODEL = 'bookshelf.CustomUser'
+
+#to be deleted??
+# LOGIN_REDIRECT_URL = '/relationship_app/profile/'
+# LOGOUT_REDIRECT_URL = "/relationship_app/profile/"
+
+#added security for mock project
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+
+#ONLY USE IN DEPLOYMENT
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Include subdomains in HSTS
+SECURE_HSTS_PRELOAD = True  # Allow site to be preloaded by browsers
+SECURE_PROXY_SSL_HEADER = "HTTP_X_FORWARDED_PROTO"
+
+
+#csp settings
+CSP_DEFAULT_SRC = ("'self'",)  # Allow content only from the same origin

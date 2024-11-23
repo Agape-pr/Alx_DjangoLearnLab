@@ -4,16 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Librarian Page</title>
-    <!-- Link to the CSS file using the {% static %} tag -->
+    <title>List of Books</title>
+    <!-- Link to the shared CSS file from relationship_app -->
     <link rel="stylesheet" type="text/css" href="{% static 'relationship_app/css/styles.css' %}">
 </head>
 <body>
     <header>
-        <h1>Welcome to the Librarian Page!</h1>
+        <h1>Books Available:</h1>
     </header>
     <main>
-        <p>Only librarians can view this page. You're logged in as a Librarian.</p>
+        <ul>
+            {% for book in books %}
+            <li>{{ book.title }} by {{ book.author.name }}</li>
+            {% empty %}
+            <li>No books available at the moment.</li>
+            {% endfor %}
+        </ul>
     </main>
     <footer>
         <p>© 2024 Django Mock</p>

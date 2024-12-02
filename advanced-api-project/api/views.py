@@ -40,7 +40,6 @@ class BookListView(generics.ListAPIView):
     filterset_class = BookFilter  # Assign the custom filter class
     ordering_fields = ['publication_year', 'title']  # Specify the fields that can be ordered
     ordering = ['publication_year']
-    
     search_fields = ['title', 'author']
 
 class BookDetailView(generics.RetrieveAPIView):
@@ -62,7 +61,7 @@ class BookUpdateView(generics.UpdateAPIView):
         return obj
     
 class BookDeleteView(generics.DestroyAPIView):
-    queryset = Book.objects.alll()
+    queryset = Book.objects.all()
     serializer_class = BookSerializer
     lookup_field = 'pk'
     permission_classes = [IsAuthenticated]

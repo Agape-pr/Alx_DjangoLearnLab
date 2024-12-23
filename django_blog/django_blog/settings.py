@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog',
+    'blog.apps.BlogConfig',
 ]
 
 MIDDLEWARE = [
@@ -74,7 +74,7 @@ TEMPLATES = [
 
 STATIC_URL = '/static/'  # URL for accessing static files
 STATICFILES_DIRS = [
- #   BASE_DIR / "static",  # Static files directory (separate from templates)
+    BASE_DIR / 'static',  # Static files directory (separate from templates)
 ]
 
 
@@ -90,7 +90,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
         'HOST': 'localhost',
         'USER': 'agape',
-        'PORT': '8080'
+        'DATABASE': 'Blog',
+        'PASSWORD' : 'Donatha0784748183!',
+        'PORT': '8080',
     }
 }
 
@@ -133,6 +135,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'profile'
+LOGOUT_REDIRECT_URL = 'logout_success'
+                  
+# AUTH_USER_MODEL = 'blog.CustomUser'
 
 
 

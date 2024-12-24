@@ -13,7 +13,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ['bio','profile_picture']
          
 
-#         return instance
+
 
 class ChangeEmailSerializer(serializers.Serializer):
     email = serializers.EmailField(required =True)

@@ -61,31 +61,32 @@ class ChangeEmailView(generics.UpdateAPIView):
     
 class PostListView(ListView):
     model = Post
-    template_name = "blog/view_all.html"
+    template_name = "blog/listing.html"
     
     
     
 class PostDetailView(DetailView):
     model = Post
-    template_name ="blog/detail.html"
+    template_name ="blog/viewing.html"
     context_object_name = "post"
     
     
 class PostCreateView(LoginRequiredMixin,CreateView):
     model = Post
     form_class = PostForm
-    template_name = "blog/create_post.html"
+    template_name = "blog/creating.html"
     success_url = reverse_lazy('all_post') 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
         
+
    
 
 class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Post
     form_class = PostForm
-    template_name = "blog/post_update.html"
+    template_name = "blog/editing.html"
     success_url = reverse_lazy("all_post")
     def test_func(self):
         post = self.get_object()
@@ -93,9 +94,13 @@ class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     
 class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Post
-    template_name = "blog/post_delete_conf.html"
+    template_name = "blog/deleting.html"
     success_url = reverse_lazy('all_post')
     
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
+    
+    #To customize if the user is not the owner of the post
+    # def handle_no_permission(self):
+    # return , render http file

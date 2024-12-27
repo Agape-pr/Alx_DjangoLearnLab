@@ -12,8 +12,8 @@ from .api.serializer import ChangeEmailSerializer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from django.views.generic import ListView, DetailView,CreateView,UpdateView,DeleteView
-from .models import Post 
-from .forms import PostForm
+from .models import Post , Comment
+from .forms import PostForm, CommentForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
@@ -70,15 +70,38 @@ class PostDetailView(DetailView):
     template_name ="blog/viewing.html"
     context_object_name = "post"
     
+    def post(self, request, *args, **kwargs):
+        self.object=self.get_object
+        if request.user.is_authenticated:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.post = self.object
+                comment.author = request.user   
+                comment.save()
+                return redirect('post_details', pk=self.object.pk)
+            
+        else:
+            return redirect('login')
+                
+    
+    
+    
+
     
 class PostCreateView(LoginRequiredMixin,CreateView):
     model = Post
     form_class = PostForm
     template_name = "blog/creating.html"
-    success_url = reverse_lazy('all_post') 
+    #success_url = reverse_lazy('post_detail', pk = self.object.pk )
+   # return redirect('detail_view', )
+    
     def form_valid(self, form):
+        self.object = self.get_object
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        post = form.save()  # Save the post
+        #return super().form_valid(form)
+        return redirect('post_detail', pk=post.pk)
         
 
    
@@ -101,6 +124,10 @@ class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         post = self.get_object()
         return self.request.user == post.author
     
-    #To customize if the user is not the owner of the post
-    # def handle_no_permission(self):
-    # return , render http file
+  
+  
+class CommentView(ListView):
+    model = Comment
+    template_name = "blog/viewing.html"
+    
+

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'blog/base.html' %}
 
 {% block content %}
     <h1>{{ post.title }}</h1>
@@ -7,3 +7,21 @@
     <p><strong>Updated At:</strong> {{ post.updated_at }}</p>
     <div>{{ post.content }}</div>
 {% endblock %}
+
+
+<hr>
+
+<h2>Comments:</h2>
+{% if comments %}
+    <ul>
+        {% for comment in comments %}
+            <li>
+                <p><strong>{{ comment.author.username }}</strong> said:</p>
+                <p>{{ comment.content }}</p>
+                <p><small>{{ comment.created_at|date:"F d, Y H:i" }}</small></p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No comments yet. Be the first to comment!</p>
+{% endif %}

@@ -179,7 +179,7 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return reverse_lazy("post_detail", kwargs = {'pk': comment.post.pk})
     
 
-class CommentCreate(LoginRequiredMixin, CreateView):
+class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     form_class = CommentForm
     template_name= "blog/comment_create.html"

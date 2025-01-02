@@ -6,22 +6,50 @@
     <p><strong>Created At:</strong> {{ post.created_at }}</p>
     <p><strong>Updated At:</strong> {{ post.updated_at }}</p>
     <div>{{ post.content }}</div>
-{% endblock %}
+    <a href="{% url 'all_post' %}">see all posts</a>
 
 
 <hr>
 
-<h2>Comments:</h2>
-{% if comments %}
-    <ul>
+
+    <!-- Comment Section -->
+    <div class="comments-section">
+      <h2>Comments</h2>
+      
+      <!-- Display Existing Comments -->
+      <div class="comments-list">
         {% for comment in comments %}
-            <li>
-                <p><strong>{{ comment.author.username }}</strong> said:</p>
-                <p>{{ comment.content }}</p>
-                <p><small>{{ comment.created_at|date:"F d, Y H:i" }}</small></p>
-            </li>
+          <div class="comment">
+            <p><strong>{{ comment.author.username }}</strong> ({{ comment.created_at }})</p>
+            <p>{{ comment.content }}</p>
+            
+            <!-- Edit and Delete Comment Links -->
+            {% if comment.author == user %}
+              <a href="{% url 'comment_edit' pk=comment.pk %}">Edit</a> |
+              <a href="{% url 'comment_delete' pk=comment.pk %}">Delete</a>
+            {% endif %}
+          </div>
+    
+    
+        {% empty %}
+          <p>No comments yet. Be the first to comment!</p>
         {% endfor %}
-    </ul>
-{% else %}
-    <p>No comments yet. Be the first to comment!</p>
-{% endif %}
+     
+      <a href="{% url 'comment_create' post.pk %}">add a comment</a>
+    </div>
+      <!-- Add a New Comment -->
+      {% comment %} {% if user.is_authenticated %}
+        <div class="add-comment">
+          <h3>Add a Comment</h3>
+          <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Post Comment</button>
+          </form>
+        </div>
+      {% else %}
+        <p><a href="{% url 'login' %}">Login</a> to add a comment.</p>
+      {% endif %}
+    </div> {% endcomment %}
+  {% comment %} </div> {% endcomment %}
+{% endblock %}

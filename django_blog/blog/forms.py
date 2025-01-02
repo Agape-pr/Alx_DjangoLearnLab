@@ -24,9 +24,10 @@ class CommentForm(forms.ModelForm):
         fields = ['content']
         
     def clean(self):
-        content = self.cleaned_data.get('content')
-        if len(content)<20:
-            raise forms.ValidationError("the comment should not exceeds the 300 characters")
+        cleaned_data = super().clean()
+        content = cleaned_data.get('content')
+        if content and len(content) < 20:
+            raise forms.ValidationError("The comment should not be less than 20 characters.")
+        return cleaned_data
         
-        return content
     

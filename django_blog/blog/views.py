@@ -214,12 +214,18 @@ def search_posts(request):
     return render(request,'blog/search_results.html', {'query' : query, 'results' : results})
 
     
-def posts_by_tag(request , tag_name):
-    posts = Post.objects.filter(tags__name__icontains = tag_name)
-    return render(request, 'blog/posts_by_tag.html',{'posts':posts, 'tag_name': tag_name})
+
 
     
     
     
-    
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/post_by_tag.html'  # The template to display the posts for a specific tag
+    context_object_name = 'posts'  # The variable name to use in the template for the list of posts
+
+    def get_queryset(self):
+        tag_slug = self.kwargs['tag_slug']  # Get the slug from the URL
+        tag = get_object_or_404(Tag, slug=tag_slug)  # Fetch the tag or 404 if not found
+        return Post.objects.filter(tags=tag)  # Filter posts by the selected tag
 

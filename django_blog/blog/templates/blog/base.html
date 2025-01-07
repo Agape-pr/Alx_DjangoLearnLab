@@ -20,6 +20,11 @@
 
                 <li><a href="{% url 'register' %}">Register</a></li>
             </ul>
+            <form action="{% url 'search_posts' %}" method="get">
+                <input type="text" name="q" placeholder="Search..." value="{{ query|default:'' }}">
+                <button type="submit">Search</button>
+            </form>
+            
         </nav>
     </header>
 

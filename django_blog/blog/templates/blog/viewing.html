@@ -5,6 +5,12 @@
     <p><strong>Author:</strong> {{ post.author.username }}</p>
     <p><strong>Created At:</strong> {{ post.created_at }}</p>
     <p><strong>Updated At:</strong> {{ post.updated_at }}</p>
+    <p><strong>Tag:</strong>
+      {% for tag in post.tags.all %}
+        <a href="{% url 'posts_by_tag' tag.name %}"><{{tag.name}}</a>
+        {% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </p>
     <div>{{ post.content }}</div>
     <a href="{% url 'all_post' %}">see all posts</a>
 
@@ -37,19 +43,5 @@
      
       <a href="{% url 'comment_create' post.pk %}">add a comment</a>
     </div>
-      <!-- Add a New Comment -->
-      {% comment %} {% if user.is_authenticated %}
-        <div class="add-comment">
-          <h3>Add a Comment</h3>
-          <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Post Comment</button>
-          </form>
-        </div>
-      {% else %}
-        <p><a href="{% url 'login' %}">Login</a> to add a comment.</p>
-      {% endif %}
-    </div> {% endcomment %}
-  {% comment %} </div> {% endcomment %}
+    
 {% endblock %}

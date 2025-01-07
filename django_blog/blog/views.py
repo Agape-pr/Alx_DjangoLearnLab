@@ -16,6 +16,7 @@ from .models import Post , Comment
 from .forms import PostForm, CommentForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 # Create your views here.
 
@@ -63,7 +64,7 @@ class ChangeEmailView(generics.UpdateAPIView):
 class PostListView(ListView):
     model = Post
     template_name = "blog/listing.html"
-    
+    queryset = Post.objects.all().order_by('-created_at')
     context_object_name = "posts"
     
     
@@ -149,7 +150,7 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin,UpdateView):
         Comment = self.get_object()
         return self.request.user == Comment.author
     
-    def form_valid(self, form):
+    def form_valid(self, form): 
         
         form.save()
         return redirect('post_detail', pk=self.object.post.pk)
@@ -200,9 +201,23 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         return  reverse_lazy('post_detail', kwargs= {'pk': self.object.post.pk})
     
         
+def search_posts(request):
+    query = request.GET.get('q', '')
+    results =[]
+
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query)|
+            Q(tags__name__icontains=query)
+        ).distinct()    
+    return render(request,'blog/search_results.html', {'query' : query, 'results' : results})
+
     
-    
-    
+def posts_by_tag(request , tag_name):
+    posts = Post.objects.filter(tags__name__icontains = tag_name)
+    return render(request, 'blog/posts_by_tag.html',{'posts':posts, 'tag_name': tag_name})
+
     
     
     

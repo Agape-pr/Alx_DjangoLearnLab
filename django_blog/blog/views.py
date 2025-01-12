@@ -103,7 +103,7 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin,CreateView):
     model = Post
     form_class = PostForm
-    template_name = "blog/create.html"
+    template_name = "blog/CreateView.html"
     #success_url = reverse_lazy('post_detail', pk = self.object.pk )
    # return redirect('detail_view', )
     
@@ -120,7 +120,7 @@ class PostCreateView(LoginRequiredMixin,CreateView):
 class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Post
     form_class = PostForm
-    template_name = "blog/edit.html"
+    template_name = "blog/UpdateView.html"
     success_url = reverse_lazy("all_post")
     #test_func is for userpassestestmixim
     def test_func(self):
@@ -129,7 +129,7 @@ class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     
 class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Post
-    template_name = "blog/delete.html"
+    template_name = "blog/post_delete.html"
     success_url = reverse_lazy('all_post')
     
     def test_func(self):

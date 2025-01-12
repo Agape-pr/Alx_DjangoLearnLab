@@ -9,7 +9,7 @@ from .views import search_posts, PostByTagListView
 
 
 urlpatterns = [
-    path('',registration, name = 'register'),
+    path('register/',registration, name = 'register'),
     path('login/', LoginView.as_view(template_name='blog/login.html'), name='login'),
    
     path('profile/',profile_view, name='profile'),

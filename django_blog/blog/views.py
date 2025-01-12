@@ -63,14 +63,14 @@ class ChangeEmailView(generics.UpdateAPIView):
     
 class PostListView(ListView):
     model = Post
-    template_name = "blog/listing.html"
+    template_name = "blog/list.html"
     queryset = Post.objects.all().order_by('-created_at')
     context_object_name = "posts"
     
     
 class PostDetailView(DetailView):
     model = Post
-    template_name ="blog/viewing.html"
+    template_name ="blog/view.html"
     context_object_name = "post"
     
     def get_context_data(self, **kwargs):
@@ -103,7 +103,7 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin,CreateView):
     model = Post
     form_class = PostForm
-    template_name = "blog/creating.html"
+    template_name = "blog/create.html"
     #success_url = reverse_lazy('post_detail', pk = self.object.pk )
    # return redirect('detail_view', )
     
@@ -120,7 +120,7 @@ class PostCreateView(LoginRequiredMixin,CreateView):
 class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Post
     form_class = PostForm
-    template_name = "blog/editing.html"
+    template_name = "blog/edit.html"
     success_url = reverse_lazy("all_post")
     #test_func is for userpassestestmixim
     def test_func(self):
@@ -129,7 +129,7 @@ class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     
 class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Post
-    template_name = "blog/deleting.html"
+    template_name = "blog/delete.html"
     success_url = reverse_lazy('all_post')
     
     def test_func(self):

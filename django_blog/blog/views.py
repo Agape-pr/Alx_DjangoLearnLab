@@ -70,7 +70,7 @@ class PostListView(ListView):
     
 class PostDetailView(DetailView):
     model = Post
-    template_name ="blog/view.html"
+    template_name ="blog/post_detail.html"
     context_object_name = "post"
     
     def get_context_data(self, **kwargs):
